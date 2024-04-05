@@ -1,0 +1,69 @@
+repos:
+  # General git checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    # Removes unnecessary whitespace at the end of lines, improving code readability and
+    # preventing potential issues in certain editors.
+    - id: trailing-whitespace
+
+    # Ensures files end with a newline, providing consistency across codebases and conforming to
+    # POSIX standards for better interoperability.
+    - id: end-of-file-fixer
+
+    # Validates YAML files' syntax and structure, preventing potential issues caused by improperly
+    # formatted configuration files.
+    - id: check-yaml
+
+    # Prevents committing large files that can slow down repository performance, ensuring the repo
+    # stays lightweight and manageable.
+    - id: check-added-large-files
+
+    # Sorts Python package requirements in a requirements.txt file alphabetically, improving
+    # readability and simplifying dependency management.
+    # - id: requirements-txt-fixer
+
+    # Adds or adjusts the encoding pragma in Python source files, ensuring compatibility with the
+    # Python interpreter across different encodings.
+    - id: fix-encoding-pragma
+
+    # Identifies accidentally committed private keys, protecting sensitive information from being
+    # exposed in public repositories.
+    - id: detect-private-key
+
+    # Verifies that scripts with a shebang are marked as executable, ensuring proper script
+    # execution in Unix-based systems.
+    - id: check-shebang-scripts-are-executable
+
+    # Detects filename conflicts that arise due to case-insensitive filesystems, preventing issues
+    # in cross-platform projects.
+    - id: check-case-conflict
+
+  # Enforces a consistent code formatting style throughout the project, improving code readability
+  # and reducing formatting-related discussions during code reviews.
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+    - id: black
+      args: ["--line-length", "79"]
+      language_version: python3.12
+
+  # Checks Python code for adherence to PEP 8 style guidelines, potential programming errors, and
+  # code complexity, helping maintain code quality.
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+    - id: flake8
+      exclude: .git,__pycache__,docs/source/conf.py,old,build,dist
+      args: ["--extend-ignore=E501,W605,E203"]
+      language_version: python3.12
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.3.5
+    hooks:
+      # Run the linter.
+      - id: ruff
+      # Run the formatter.
+      - id: ruff-format
+        args: ["--line-length", "79"]
