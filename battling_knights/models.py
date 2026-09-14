@@ -1,35 +1,31 @@
-# -*- coding: utf-8 -*-
-"""
-Models for the game
+"""Models for game.
 
 Description:
-    - Knight: Model for the knight
-    - Item: Model for the item
+- Knight: Model for knight.
+- Item: Model for item.
 
 """
 
 from dataclasses import dataclass
-
-from typing_extensions import Self
+from typing import Self
 
 from .constants import STATUS
 
 
 @dataclass
 class ItemAttributes:
-    """
-    Model for the item attributes
+    """Model for item attributes.
 
-    Description:
-        - ItemAttributes model to store the attributes of the item
+    :Description:
+    - ItemAttributes model to store attributes of item
 
-    Attributes:
-        - `code (str)`: Code of the item
-        - `name (str)`: Name of the item
-        - `attack (int)`: Attack power of the item
-        - `defence (int)`: Defence power of the item
-        - `priority (int)`: Priority of the item
-        - `position (list[int])`: Position of the item
+    :Attributes:
+    - `code` (str): Code of item.
+    - `name` (str): Name of item.
+    - `attack` (int): Attack power of item.
+    - `defence` (int): Defence power of item.
+    - `priority` (int): Priority of item.
+    - `position` (list[int]): Position of item.
 
     """
 
@@ -42,73 +38,78 @@ class ItemAttributes:
 
 
 class Item:
-    """
-    Model for the item
+    """Model for item.
 
-    Description:
-        - Item model to store the details of the item
+    :Description:
+    - Item model to store details of item
 
-    Attributes:
-        - `code (str)`: Code of the item
-        - `name (str)`: Name of the item
-        - `attack (int)`: Attack power of the item
-        - `defence (int)`: Defence power of the item
-        - `priority (int)`: Priority of the item
-        - `position (list[int])`: Position of the item
+    :Attributes:
+    - `code` (str): Code of item.
+    - `name` (str): Name of item.
+    - `attack` (int): Attack power of item.
+    - `defence` (int): Defence power of item.
+    - `priority` (int): Priority of item.
+    - `position` (list[int]): Position of item.
 
-    Methods:
-        - `to_json`: Method to convert the item to JSON format
+    :Methods:
+    - `to_json`: Method to convert item to JSON format
 
     """
 
     def __init__(self, item: ItemAttributes) -> None:
+        """Initialize item with given attributes.
+
+        :Args:
+        - `item` (ItemAttributes): Attributes of item
+
+        :Returns:
+        - `None`
+
+        """
         self.code: str = item.code
         self.name: str = item.name
         self.attack: int = item.attack
         self.defence: int = item.defence
         self.priority: int = item.priority
-        self.position: list[int] = item.position
+        self.position: list[int] | None = item.position
 
-    def to_json(self) -> list[list[int] | bool]:
+    def to_json(self) -> list[list[int] | bool | None]:
+        """Method to convert item to JSON format.
+
+        :Description:
+        - Converts item to JSON format
+
+        :Args:
+        - `None`
+
+        :Returns:
+        - `list[list[int] | bool | None]`: JSON representation of item
+
         """
-        Method to convert the item to JSON format
-
-        Description:
-            - Converts the item to JSON format
-
-        Args:
-            - `None`
-
-        Returns:
-            - `list[list[int] | bool]`: JSON representation of the item
-
-        """
-
         return [self.position, self.position is None]
 
 
 @dataclass
 class KnightAttributes:
-    """
-    Model for the knight attributes
+    """Model for knight attributes.
 
-    Description:
-        - KnightAttributes model to store the attributes of the knight
+    :Description:
+    - KnightAttributes model to store attributes of knight
 
-    Attributes:
-        - `code (str)`: Code of the knight
-        - `name (str)`: Name of the knight
-        - `position (list[int])`: Position of the knight
-        - `status (STATUS)`: Status of the knight
-        - `item` (Item)`: Item equipped by the knight
-        - `attack (float)`: Attack power of the knight
-        - `defence (int)`: Defence power of the knight
+    :Attributes:
+    - `code` (str): Code of knight.
+    - `name` (str): Name of knight.
+    - `position` (list[int] | None): Position of knight.
+    - `status` (STATUS): Status of knight.
+    - `item` (Item): Item equipped by knight.
+    - `attack` (float): Attack power of knight.
+    - `defence` (int): Defence power of knight.
 
     """
 
     code: str
     name: str
-    position: list[int]
+    position: list[int] | None
     item: Item | None = None
     status: STATUS = STATUS.LIVE
     attack: float = 1.0
@@ -116,24 +117,23 @@ class KnightAttributes:
 
 
 class Knight:
-    """
-    Model for the knight
+    """Model for knight.
 
-    Description:
-        - Knight model to store the details of the knight
+    :Description:
+    - Knight model to store details of knight
 
-    Attributes:
-        - `code (str)`: Code of the knight
-        - `name (str)`: Name of the knight
-        - `position (list[int])`: Position of the knight
-        - `status (STATUS)`: Status of the knight
-        - `item` (Item)`: Item equipped by the knight
-        - `attack (float)`: Attack power of the knight
-        - `defence (int)`: Defence power of the knight
+    :Attributes:
+    - `code` (str): Code of knight.
+    - `name` (str): Name of knight.
+    - `position` (list[int] | None): Position of knight.
+    - `status` (STATUS): Status of knight.
+    - `item` (Item): Item equipped by knight.
+    - `attack` (float): Attack power of knight.
+    - `defence` (int): Defence power of knight.
 
-    Methods:
-        - `fight`: Method to fight with another knight
-        - `to_json`: Method to convert the knight to JSON format
+    :Methods:
+    - `fight`: Method to fight with another knight.
+    - `to_json`: Method to convert knight to JSON format.
 
     """
 
@@ -141,31 +141,41 @@ class Knight:
         self,
         knight: KnightAttributes,
     ) -> None:
+        """Constructor to initialize knight with given attributes.
+
+        :Description:
+        - Initializes knight with provided KnightAttributes.
+
+        :Args:
+        - `knight (KnightAttributes)`: Attributes of knight to initialize
+
+        :Returns:
+        - `None`
+
+        """
         self.code: str = knight.code
         self.name: str = knight.name
-        self.position: list[int] = knight.position
+        self.position: list[int] | None = knight.position
         self.status: STATUS = knight.status
         self.item: Item | None = knight.item
         self.attack: float = knight.attack
         self.defence: int = knight.defence
 
-    def fight(self, defender) -> Self:
+    def fight(self, defender: Self) -> Self:
+        """Method to fight with another knight.
+
+        :Description:
+        - Method to fight with another knight.
+        - Knight with higher attack power wins.
+        - Loser's attack and defence power is set to 0.
+
+        :Args:
+        - `defender (Knight)`: Knight to fight with
+
+        :Returns:
+        - `Knight`: Loser of fight
+
         """
-        Method to fight with another knight
-
-        Description:
-            - Method to fight with another knight
-            - The knight with higher attack power wins
-            - The loser's attack and defence power is set to 0
-
-        Args:
-            - `defender (Knight)`: Knight to fight with
-
-        Returns:
-            - `Knight`: The loser of the fight
-
-        """
-
         total_attack: float = (
             self.attack + (self.item.attack if self.item else 0) + 0.5
         )
@@ -179,21 +189,19 @@ class Knight:
         return loser
 
     def to_json(self) -> list[list[int] | STATUS | str | int | float | None]:
+        """Method to convert knight to JSON format.
+
+        :Description:
+        - Converts knight to JSON format
+
+        :Args:
+        - `None`
+
+        :Returns:
+        - `list[list[int] | STATUS | str | None | int]`: JSON
+        representation of knight
+
         """
-        Method to convert the knight to JSON format
-
-        Description:
-            - Converts the knight to JSON format
-
-        Args:
-            - `None`
-
-        Returns:
-            - `list[list[int] | STATUS | str | None | int]`: JSON
-            representation of the knight
-
-        """
-
         return [
             self.position,
             self.status.value,

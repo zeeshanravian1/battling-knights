@@ -1,19 +1,16 @@
-# -*- coding: utf-8 -*-
-"""
-Main file for the game
+"""Main file for game.
 
 Description:
-    - The main file for the game
-    - The file reads the moves from the moves.txt file
-    - Executes the moves and saves the final state to final_state.json
+- Main file for game.
+- File reads moves from moves.txt file.
+- Executes moves and saves final state to final_state.json.
 
 """
 
 import json
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from battling_knights.constants import STATUS
 from battling_knights.models import (
     Item,
     ItemAttributes,
@@ -21,6 +18,9 @@ from battling_knights.models import (
     KnightAttributes,
 )
 from battling_knights.utils import execute_move
+
+if TYPE_CHECKING:
+    from battling_knights.constants import STATUS
 
 # Setup logging
 logging.basicConfig(
@@ -31,74 +31,70 @@ logging.basicConfig(
     ),
 )
 
-logger: logging.Logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(name=__name__)
 
 
-def load_moves(filename) -> list[str]:
+def load_moves(filename: str) -> list[str]:
+    """Load moves from moves.txt file.
+
+    :Description:
+    - Function reads moves from moves.txt file.
+    - Returns a list of moves.
+
+    :Args:
+    - `filename (str)`: Name of file to load moves from.
+
+    :Returns:
+    - `list[str]`: A list of moves.
+
+    :Raises:
+    - `FileNotFoundError`: If file does not exist.
+    - `ValueError`: If GAME-START or GAME-END tag is missing.
+    - `Exception`: If any other error occurs.
+
     """
-    Load moves from the moves.txt file
-
-    Description:
-        - The function reads the moves from the moves.txt file
-        - Returns a list of moves
-
-    Args:
-        - `filename (str)`: The name of the file to load moves from
-
-    Returns:
-        - `list[str]`: A list of moves
-
-    Raises:
-        - `FileNotFoundError`: If the file does not exist
-        - `ValueError`: If GAME-START or GAME-END tag is missing
-        - `Exception`: If any other error occurs
-
-    """
-
     try:
-        with open(filename, "r", encoding="utf-8") as file:
-            data: list[str] = file.read().split("\n")
+        with open(file=filename, encoding="utf-8") as file:
+            data: list[str] = file.read().split(sep="\n")
             moves: list[str] = data[
                 data.index("GAME-START") + 1 : data.index("GAME-END")
             ]
-            logger.info("Moves loaded successfully.")
+            logger.info(msg="Moves loaded successfully.")
 
             return moves
 
-    except FileNotFoundError as err:
+    except FileNotFoundError:
         logger.error("File %s not found.", filename)
-        raise err
+        raise
 
-    except ValueError as err:
-        logger.error("GAME-START or GAME-END tag is missing.")
-        raise err
+    except ValueError:
+        logger.error(msg="GAME-START or GAME-END tag is missing.")
+        raise
 
     except Exception as err:
         logger.error("Failed to load moves from %s: %s", filename, err)
-        raise err
+        raise
 
 
 def main() -> None:
+    """Main function to execute game.
+
+    :Description:
+    - Main function to execute game.
+    - Loads moves from moves.txt file.
+    - Executes moves.
+    - Saves final state to final_state.json.
+
+    :Args:
+    - `None`
+
+    :Returns:
+    - `None`
+
+    :Raises:
+    - `Exception`: If any error occurs during game execution
+
     """
-    Main function to execute the game
-
-    Description:
-        - The main function to execute the game
-        - Loads the moves from the moves.txt file
-        - Executes the moves
-        - Saves the final state to final_state.json
-
-    Args:
-        - `None`
-
-    Returns:
-        - `None`
-
-    Raises:
-        - Exception: If any error occurs during game execution
-
-    """
-
     knights: dict[str, Knight] = {
         "R": Knight(
             knight=KnightAttributes(
@@ -174,7 +170,8 @@ def main() -> None:
     }
 
     try:
-        moves: list[str] = load_moves("moves.txt")
+        moves: list[str] = load_moves(filename="moves.txt")
+
         for move in moves:
             execute_move(knights, items, move)
 
@@ -188,11 +185,12 @@ def main() -> None:
             {item.name.lower(): item.to_json() for item in items.values()}
         )
 
-        with open("final_state.json", "w", encoding="utf-8") as file:
-            json.dump(final_state, file, indent=4)
-        logger.info("Final state written to final_state.json")
+        with open(file="final_state.json", mode="w", encoding="utf-8") as file:
+            json.dump(obj=final_state, fp=file, indent=4)
+        logger.info(msg="Final state written to final_state.json")
 
-    except Exception as err:
+    # pylint: disable=broad-exception-caught
+    except Exception as err:  # noqa:BLE001
         logger.error("An error occurred during game execution: %s", err)
 
 

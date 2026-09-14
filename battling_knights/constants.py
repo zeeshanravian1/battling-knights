@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Constants used in the project
+"""Constants used in project.
 
 Description:
-    - STATUS: Enum for the status of the player
-    - DIRECTIONS: Dictionary for the directions the player can move
+- STATUS: Enum for status of player.
+- DIRECTIONS: Dictionary for directions player can move.
 
 """
 
@@ -12,13 +10,12 @@ from enum import Enum
 
 
 class STATUS(Enum):
-    """
-    Enum for the status of the player
+    """Enum for status of player.
 
-    Attributes:
-        - LIVE: Player is alive
-        - DEAD: Player is dead
-        - DROWNED: Player is drowned
+    :Attributes:
+    - `LIVE`: Player is alive
+    - `DEAD`: Player is dead
+    - `DROWNED`: Player is drowned
 
     """
 
